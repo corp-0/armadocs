@@ -139,7 +139,10 @@ class FunctionPage():
         self.find_docstring_data()
         self.find_code()
         self.find_arguments()
-        self.write_file(self.find_author())
+        try:
+            self.write_file(self.find_author())
+        except:
+            pass
         self.find_headers()
         self.find_data_type()
         
@@ -169,7 +172,7 @@ class FunctionPage():
         self.docstring = "\n".join(splited)
     
     def find_code(self):
-        code_string = re.findall(r"\[.*\] call .*;", self.docstring, re.I | re.M)
+        code_string = re.findall(r"\[.*\] call .*[;]?", self.docstring, re.I | re.M)
 
         for match in code_string:
             self.docstring = self.docstring.replace(match, self.md.code(match))

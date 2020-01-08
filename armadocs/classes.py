@@ -84,7 +84,7 @@ class YAMLGenerator:
         print(directory)
         for root, dirs, files in os.walk(directory, topdown=True):
             for file in files:
-                if "fn_" in file:
+                if "fn_" in file or "fnc_" in file:
                     self.total_count_fnc += 1
                     # full_path = (os.path.join(root, file)).split("\\")
                     rel_path = (os.path.join(root, file)).replace(
@@ -97,7 +97,10 @@ class YAMLGenerator:
                         category = rel_path.split("\\")[-2]
                         subcategory = None
 
-                    fnc_name = ((file.replace("fn_", "")).split("."))[0]
+                    if "fn_" in file:
+                        fnc_name = ((file.replace("fn_", "")).split("."))[0]
+                    elif "fnc_" in file:
+                        fnc_name = ((file.replace("fnc_", "")).split("."))[0]
 
                     if not category in self.functions.keys():
                         self.functions[category] = [
@@ -164,9 +167,10 @@ class DocGenerator:
                 
                 try:
                     self.generate_fnc_page(fnc)
-                except:
+                except Exception as e:
                     print(f'error at: {fnc["function"]}. Maybe the function is not documented?')
-
+                    print(str(e))
+            
             
         print("Documentation generated!")
 
