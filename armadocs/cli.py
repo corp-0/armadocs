@@ -6,8 +6,11 @@ Entry point for the script
 """
 
 import click
-from version import __version__, __release__
-from classes import YAMLGenerator, DocGenerator
+# from version import __version__, __release__
+# from classes import YAMLGenerator, DocGenerator
+from armadocs.version import __version__, __release__
+from armadocs.classes import YAMLGenerator, DocGenerator
+
 
 
 @click.group()
@@ -33,7 +36,7 @@ def init():
 @main.command()
 def generate():
     """Reads the YAML data and generates the documentation"""
-    DocGenerator()
+    DocGenerator().generate_documentation()
 
 if __name__ == "__main__":
     main()
