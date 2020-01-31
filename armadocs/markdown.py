@@ -133,7 +133,7 @@ class FunctionPage():
 
         with open(".armadocs.yml", "r", encoding="UTF-8") as f:
             self.yaml_data = f.read()
-            self.yaml_data = yaml.load(self.yaml_data)
+            self.yaml_data = yaml.load(self.yaml_data, Loader=yaml.FullLoader)
 
         self.write_file(self.md.heading(self.function_name))
         self.find_docstring_data()
@@ -170,6 +170,8 @@ class FunctionPage():
                 splited.append(text)
 
         self.docstring = "\n".join(splited)
+
+        return re.search(r"\/\*(.*)\*\/", sqf_data, re.S)
     
     def find_code(self):
         code_string = re.findall(r"\[.*\] call .*[;]?", self.docstring, re.I | re.M)
