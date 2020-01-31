@@ -6,8 +6,6 @@ Entry point for the script
 """
 
 import click
-# from version import __version__, __release__
-# from classes import YAMLGenerator, DocGenerator
 from armadocs.version import __version__, __release__
 from armadocs.classes import YAMLGenerator, DocGenerator
 
