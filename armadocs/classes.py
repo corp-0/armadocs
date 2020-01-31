@@ -156,8 +156,18 @@ class DocGenerator:
             quit()
         else:
             print("YAML file read successfully!")
+            self.branch = self.yaml_data["branch"]
+            self.branch_environ = self.yaml_data["branch_environ"]
+            self.branch_commit = os.environ[self.branch_environ]
 
     def generate_documentation(self):
+        if not self.check_branch():
+            print(f'I will not generate docs because branch: {self.branch_commit}')
+            
+            return "No docs generated"
+        else:
+            print(f'Branch: {self.branch_commit}. Generating docs!')
+
         self.create_docs_folder()
         
         for category in self.yaml_data["functions"]:
@@ -176,6 +186,12 @@ class DocGenerator:
             self.generate_index_page()
     
         print("Documentation generated!")
+
+    def check_branch(self):
+        if self.branch_commit == self.branch:
+            return True
+        else:
+            return False
 
     def create_docs_folder(self):
         docs_folder = os.path.join(os.getcwd(), self.yaml_data["docs_folder"])
