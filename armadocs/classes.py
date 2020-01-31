@@ -55,7 +55,7 @@ class YAMLGenerator:
     def ask_index_page(self):
         choice = input("Do you want to generate an index page? [y/n]\n>> ")
         if choice.lower() == "y":
-            self.yaml_data["index_page"] = "fnc_index.md"
+            self.yaml_data["index_page"] = "function_library.md"
         else:
             self.yaml_data["index_page"] = None
 
@@ -148,20 +148,18 @@ class DocGenerator:
         try:
             with open(".armadocs.yml", "r", encoding="UTF-8") as f:
                 self.yaml_data = f.read()
-                self.yaml_data = yaml.load(self.yaml_data)
+                self.yaml_data = yaml.load(self.yaml_data, Loader=yaml.FullLoader)
         except Exception as e:
             print("Something went wrong!")
             print(str(e))
             print("Abruptly terminating script!")
             quit()
         else:
-            print("YAML file read succesfully!")
+            print("YAML file read successfully!")
 
     def generate_documentation(self):
         self.create_docs_folder()
-        if self.yaml_data["index_page"] != None:
-            self.generate_index_page()
-
+        
         for category in self.yaml_data["functions"]:
             for fnc in self.yaml_data["functions"][category]:
                 
@@ -170,8 +168,13 @@ class DocGenerator:
                 except Exception as e:
                     print(f'error at: {fnc["function"]}. Maybe the function is not documented?')
                     print(str(e))
-            
-            
+                    mal_fnc = self.yaml_data["functions"][category].index(fnc)
+                    self.yaml_data["functions"][category].pop(mal_fnc)
+                    os.remove(os.path.abspath(f'docs\\{fnc["function"]}.md'))
+        
+        if self.yaml_data["index_page"] != None:
+            self.generate_index_page()
+    
         print("Documentation generated!")
 
     def create_docs_folder(self):
